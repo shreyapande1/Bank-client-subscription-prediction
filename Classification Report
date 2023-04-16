@@ -1,0 +1,103 @@
+# Problem Setting:
+
+The main problem that is currently being addressed using Portuguese banking institution dataset is to predict whether a customer will subscribe 
+to a term deposit or not, based on the various attributes provided in the dataset. 
+The dataset consists of a total of 45,211 instances and 17 attributes, including demographic data, financial data, and marketing campaign data.
+The marketing campaign was aimed at promoting term deposits among existing customers
+
+# Problem Defination: 
+
+The problem definition for the Bank Marketing dataset is to predict whether a customer will subscribe to a term deposit or not, based on various demographic, financial, and marketing campaign data. 
+This is a binary classification problem, where the target variable is "y", which takes on the values "yes" or "no", 
+indicating whether the customer subscribed to the term deposit or not
+
+# Data Source: https://archive.ics.uci.edu/ml/machine-learning-databases/00222/
+
+# Dataset Description: https://archive.ics.uci.edu/ml/datasets/bank+marketing#
+
+# Data Exploration:
+
+Data mining tasks for Bank Subscription Prediction may include:
+
+1. Data cleaning and preprocessing: removing missing values, outliers and irrelevant data, and
+transforming the data into a format that can be easily analyzed.
+
+2. Exploratory data analysis: understanding the distribution, patterns, and relationships in the
+data, and identifying any trends or anomalies.
+
+3. Feature selection and extraction: identifying the most relevant and informative features from
+the data that can be used to predict subscription rate.
+
+4. Model development and evaluation: building and evaluating predictive models using
+techniques such as decision trees, logistic regression, or  other machine learning algorithms.
+
+5. Model deployment: implementing the model in a production environment, where it can be
+used to identify individuals for interventions.
+
+# Classification:
+• Decision Trees: A tree-based model that can be used to make decisions based on a set
+of input features.
+• Random Forest: A type of decision tree algorithm that creates multiple trees and
+combines their output to improve the overall performance of the model.
+• Gradient Boosting: A machine learning algorithm that creates an ensemble of decision
+trees, it improves the performance of the model by combining the predictions of
+multiple weak models.
+
+All of these algorithms will have their own strengths and weaknesses and the best algorithm
+choice depends on the data, business problem and the resources available.
+
+# Data Cleaning:
+For identifying and correcting or removing errors, inconsistencies, and inaccuracies in a dataset
+to improve its quality and usefulness we followed the following steps:
+
+• By seeing the data and columns and using basic functionalities like .describe() we made
+sure that the data is complete and in a usable format.
+
+• Data assessment: We then examined the data to identify any errors, inconsistencies,
+and inaccuracies. This involved checking for missing values, outliers, and data that does
+not conform to expected formats or ranges.
+
+• Checking for null values: We created a heatmap to check if any null values are present in
+the dataset. We found out that there are no null values available. For being sure further
+we also took a sum() of .isnull data values which turned out to be zero
+
+• Check for outliers: Outliers in the data were removed using the fencing technique. We
+have removed outliers after showing our visualizations as the visualizations provided us
+with enough proofs to remove the outliers.
+
+• Data validation: Validate the cleaned data to ensure that it is accurate and consistent.
+
+# Data Processing:
+(A) Removing Outliers:
+
+def out_remover(df):
+  for i in df.columns:
+    #Selecting the numerical columns in the Datset
+    if(np.issubdtype(df[i].dtype, np.number)==True):
+      #Defining q1 and q3
+      q1, q3 = np.percentile(df[i],[25, 75])
+      iqr = q3 - q1
+      inner_fence = q1 - 1.5 * iqr
+      outer_fence = q3 + 1.5 * iqr
+      #Filtering the Data
+      df=df[(df[i] >= inner_fence) & (df[i] <= outer_fence)]
+ out_remover(df)
+ 
+ (B) Converting categorical columns to numerical values
+ 
+ # One-hot encoding
+df = pd.get_dummies(df, columns=['job', 'marital', 'education', 'default', 'housing', 'loan', 'contact', 'month', 'day_of_week', 'poutcome'])
+
+# Convert the 'y' column to a binary numeric value
+df['y'] = df['y'].apply(lambda x: 1 if x == 'yes' else 0)
+
+(C) OverSampling
+
+from imblearn.over_sampling import SMOTE
+X = df.drop('y', axis=1)
+y = df['y']
+sm = SMOTE()
+X_resampled, y_resampled = sm.fit_resample(X, y)
+df_upsampled = pd.concat([pd.DataFrame(X_resampled), pd.DataFrame(y_resampled)], axis=1)
+Our oversampled set has 50% subscription rate
+
