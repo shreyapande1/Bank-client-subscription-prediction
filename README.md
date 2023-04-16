@@ -48,3 +48,7 @@ Input variables:
 
 Output variable (desired target):
 21 - y - has the client subscribed a term deposit? (binary: 'yes','no')
+
+
+# Conclusions post running the model: 
+Random Forest & Gradient Boost were found to be the best models with an Accuracy of 0.95
