@@ -100,4 +100,3 @@ sm = SMOTE()
 X_resampled, y_resampled = sm.fit_resample(X, y)
 df_upsampled = pd.concat([pd.DataFrame(X_resampled), pd.DataFrame(y_resampled)], axis=1)
 Our oversampled set has 50% subscription rate
-
